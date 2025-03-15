@@ -11,7 +11,7 @@ from langchain_core.messages import SystemMessage
 
 class supervisorAgent():
     def __init__(self):
-        self.tools=[searchAgent.node,PlayAgent.node]
+        self.tools=[searchAgent,PlayAgent]
         self.brain=LLM().get_llm_with_tools(self.tools)
         self.prompt=LLM().set_and_get_prompt(""" Based on the user's input you have to decide what tool to use:
                                              1.searchAgent: used to look up the chords for a song
