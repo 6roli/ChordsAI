@@ -22,10 +22,12 @@ MAX_ITEMS = 12
 
 
 def welcome(search_enabled: bool) -> str:
-    song = " or 'Chords of Let It Be'" if search_enabled else ""
+    examples = ["'Play C major 7'", "'Play the notes of Am'", "'What is a sus4 chord?'"]
+    if search_enabled:
+        examples.append("'Chords of Let It Be'")
     return (
-        "Hi! I explain and play chords. Try 'Play C major 7', 'Play the notes of Am', "
-        f"'What is a sus4 chord?'{song}. Press ▶ next to a chord to hear it, or click the piano keys below."
+        f"Hi! I explain and play chords. Try {', '.join(examples[:-1])} or {examples[-1]}\n"
+        "Press ▶ next to a chord to hear it, or click the piano keys below."
     )
 
 

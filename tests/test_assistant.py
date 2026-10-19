@@ -4,7 +4,7 @@ import pytest
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
 
 from chordsai.agent import recent
-from chordsai.assistant import Assistant, NotConfiguredError, chords_in_reply, quick_reply
+from chordsai.assistant import Assistant, NotConfiguredError, chords_in_reply, quick_reply, welcome
 from chordsai.sessions import SessionStore
 
 from conftest import FakeLLM, tool_call
@@ -128,3 +128,8 @@ def test_history_window_never_starts_with_a_tool_result():
     messages += [HumanMessage("c"), AIMessage("d")]
     assert recent(messages, limit=4) == messages[-2:]
     assert recent(messages, limit=50) == messages
+
+
+def test_greeting_only_mentions_songs_when_search_is_enabled():
+    assert "Let It Be" in welcome(True) and "Let It Be" not in welcome(False)
+    assert "Play C major 7" in welcome(False)
