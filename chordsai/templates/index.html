@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ChordsAI — demo</title>
+    <meta name="description" content="A chat assistant that explains chords and plays them in your browser. Built with LangGraph and Groq." />
+    <meta name="theme-color" content="#08070b" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container header__inner">
+        <div>
+          <p class="name">Chords<span class="gradient-text">AI</span></p>
+          <p class="muted small">Explains and plays chords · LangGraph + Groq · Web Audio</p>
+        </div>
+        <a class="pill" href="{{ portfolio_url }}">← Portfolio</a>
+      </div>
+    </header>
+
+    <main class="container">
+      <p class="notice" role="note">
+        <strong>Demo.</strong> Sound is generated in your browser (turn your volume down a little first).
+        Messages are sent to Groq to generate answers and are not stored by this demo.
+        {% if search_enabled %}Song chords come from a web search: they are suggestions and may be inaccurate.{% endif %}
+      </p>
+
+      {% if not configured %}
+      <p class="error" role="alert">
+        The AI part is not configured on this server yet. Chord names like "Cmaj7" or "Am F C G" and the piano still work.
+      </p>
+      {% endif %}
+
+      <section id="chat" class="chat" aria-live="polite" aria-label="Conversation">
+        <div class="message message--bot">{{ welcome }}</div>
+      </section>
+
+      <div class="suggestions" aria-label="Examples">
+        <button type="button" data-example="Play C major 7">Play C major 7</button>
+        <button type="button" data-example="Play the notes of Am">Notes of Am</button>
+        <button type="button" data-example="Am F C G">Am F C G</button>
+        <button type="button" data-example="Why does a minor chord sound sad?">Why does minor sound sad?</button>
+        {% if search_enabled %}
+        <button type="button" data-example="Chords of Let It Be by The Beatles">Chords of Let It Be</button>
+        {% endif %}
+        <button type="button" data-example="reset">Start over</button>
+      </div>
+
+      <form id="form" class="form">
+        <label class="visually-hidden" for="input">Your message</label>
+        <input id="input" name="message" autocomplete="off" maxlength="300" placeholder="Try: Play Dm7, or What is a sus4 chord?" required />
+        <button id="send" class="pill" type="submit">Send</button>
+      </form>
+
+      <section class="piano-panel" aria-label="Piano">
+        <div class="piano-panel__bar">
+          <p class="small muted">Click a key, or use your keyboard: A W S E D F T G Y H U J K.</p>
+          <label class="toggle"><input id="arpeggio" type="checkbox" /> Arpeggio</label>
+        </div>
+        {% set whites = keys | rejectattr('black') | list | length %}
+        <div id="piano" class="piano" style="--whites: {{ whites }}">
+          {% for key in keys %}
+          <button
+            type="button"
+            class="key {{ 'key--black' if key.black else 'key--white' }}"
+            data-midi="{{ key.midi }}"
+            data-frequency="{{ key.frequency }}"
+            aria-label="{{ key.name }}"
+            {% if key.black %}style="--i: {{ key.white_index }}"{% endif %}
+          >{% if key.name.startswith('C') and not key.black %}<span>{{ key.name }}</span>{% endif %}</button>
+          {% endfor %}
+        </div>
+      </section>
+
+      <p class="muted small footnote">
+        The server sleeps when nobody uses it; the first answer can take up to a minute.
+      </p>
+    </main>
+
+    <script src="{{ url_for('static', filename='chat.js') }}"></script>
+  </body>
+</html>

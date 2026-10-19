@@ -1,0 +1,22 @@
+# Render Blueprint: describes the free web service that runs the demo.
+# Render reads this file when you create the service with "New → Blueprint".
+services:
+  - type: web
+    name: chordsai
+    runtime: python
+    plan: free            # free instance: sleeps after 15 min idle, no payment method needed
+    region: frankfurt     # closest free region to Spain
+    branch: main
+    autoDeployTrigger: commit   # every push to main redeploys
+    # Tests run during the build: if any fails, the previous version stays online.
+    buildCommand: pip install ".[dev]" && python -m pytest -q
+    # One process (sessions live in memory) with a few threads for concurrent visitors.
+    startCommand: gunicorn chordsai.web:app --workers 1 --threads 4 --timeout 120 --bind 0.0.0.0:$PORT
+    healthCheckPath: /health
+    envVars:
+      - key: GROQ_API_KEY       # secret: entered once in the Render dashboard, never in Git
+        sync: false
+      - key: TAVILY_API_KEY     # optional (song chord search); leave empty to disable
+        sync: false
+      - key: FLASK_SECRET_KEY   # signs the session cookie
+        generateValue: true
