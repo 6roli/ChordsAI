@@ -1,0 +1,32 @@
+[project]
+name = "chordsai"
+version = "1.0.0"
+description = "Chat assistant that explains chords and plays them in the browser, built with LangGraph and Groq."
+readme = "README.md"
+requires-python = ">=3.12"
+# Exact versions: the demo must behave the same locally and on Render.
+dependencies = [
+  "flask==3.1.3",
+  "gunicorn==26.2.0",
+  "langgraph==1.2.12",
+  "langchain-core==1.6.6",
+  "langchain-groq==1.1.3",
+  "langchain-tavily==0.2.18",
+  "python-dotenv==1.2.4",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.1.1"]
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["chordsai"]
+
+[tool.setuptools.package-data]
+chordsai = ["templates/*.html", "static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
