@@ -8,7 +8,7 @@ Built with **LangGraph** and language models served by **Groq**. Sound comes fro
 
 | | |
 |---|---|
-| Live demo | *published on Render, URL added after the first deployment* |
+| Live demo | https://chordsai.onrender.com (free server: the first answer can take up to a minute) |
 | Portfolio page | https://portfolio.gabriel-olius.workers.dev/projects/chordsai/ |
 | Original version | tag [`v0-original`](https://github.com/6roli/ChordsAI/tree/v0-original) (kept unchanged) |
 | Cost | €0 (Render Free + Groq free tier, optional Tavily free credits, no payment methods) |
